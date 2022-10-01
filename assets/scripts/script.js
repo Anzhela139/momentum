@@ -33,11 +33,15 @@ function showTime() {
 
 const addZeros = (n) => {return (parseInt(n, 10) < 10 ? '0' : '') + n}
 
-const randomArr = (arr) => arr.sort( (a,b)=> 0.5-Math.random()); 
+const randomArr = (arr) => arr.slice(0).sort( (a,b)=> 0.5-Math.random()); 
 
 let base = '';
+const baseArr = ['./assets/images/morning/', './assets/images/afternoon/', './assets/images/evening/', './assets/images/night/'];
+let setBg = (index, arr) => randomArr(arr).splice(13).map(item => index + item);
+
 const images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
-let i = 0;
+let imagesRandom = [];
+let indextime = 0;
 function setBgGreet() {
   let today = new Date(),
     hour = today.getHours();
@@ -45,25 +49,28 @@ function setBgGreet() {
   if (hour >= 6 && hour < 12) {
     $greeting.textContent = 'Good Morning, ';
     base = './assets/images/morning/';
+    indextime = 0;
   } 
   else if (hour >= 12 && hour < 18) {
     $greeting.textContent = 'Good Afternoon, ';
     base = './assets/images/afternoon/';
+    indextime = 1;
   } 
-  else if (hour >= 18 && hour < 18) {
+  else if (hour >= 18 && hour <= 23) {
     $greeting.textContent = 'Good Evening, ';
     base = './assets/images/evening/';
-    document.body.style.color = 'azure';
+    indextime = 2;
+
   } 
   else {
     $greeting.textContent = 'Good Night, ';
     base = './assets/images/night/';
-    document.body.style.color = 'azure';
+    indextime = 3;
+    //document.body.style.color = 'azure';
   }
   return base;
 }
-setBgGreet();
-
+setBgGreet(base);
 
 function viewBgImage(data) {
   const body = document.querySelector('body');
@@ -71,19 +78,48 @@ function viewBgImage(data) {
   const img = document.createElement('img');
   img.src = src;
   img.onload = () => {      
-    body.style.backgroundImage = `url(${src})`;
+    body.style.backgroundImage = `url(${src}), url(./assets/images/overlay.png)`;
   }; 
 }
+let i = 0;
+
 function getImage() {
-  const imagesRandom = randomArr(images).splice(13);
-  const index = i % imagesRandom.length;
-  const imageSrc = base + imagesRandom[index];
-  console.log(imageSrc)
+  console.log(indextime)
+  let basedImages = [];
+  if (indextime === 0) {
+    basedImages = [setBg(baseArr[0], images), setBg(baseArr[1], images), setBg(baseArr[2], images), setBg(baseArr[3], images)];
+  }
+  else if (indextime === 1) {
+    basedImages = [setBg(baseArr[1], images), setBg(baseArr[2], images), setBg(baseArr[3], images), setBg(baseArr[0], images)];
+  }
+  else if (indextime === 2) {
+    basedImages = [setBg(baseArr[2], images), setBg(baseArr[3], images), setBg(baseArr[0], images), setBg(baseArr[1], images)];
+  }
+  else if (indextime === 3) {
+    basedImages = [setBg(baseArr[3], images), setBg(baseArr[0], images), setBg(baseArr[1], images), setBg(baseArr[2], images)];
+  }
+  basedImages = basedImages.flat();
+  const index = i % basedImages.length;
+  const imageSrc = `${basedImages[index]}`;
   viewBgImage(imageSrc);
-  i++;
+  i++;  
+  $btnImage.disabled = true;
+  setTimeout(function() {$btnImage.disabled = false}, 1000);
+  //setTimeout(getImage(), 600000);
 } 
 
 getImage();
+function checkHour(func) {
+  let today = new Date(),
+  min = today.getMinutes();
+  if (min === 54) {
+    func();
+    console.log('work');
+
+    setTimeout(func, 600000);
+  }
+}
+checkHour(getImage);
 function getElem(elem, dom) {
   if (localStorage.getItem(`${elem}`) === null) {
     dom.textContent = `[Enter ${elem}]`;
