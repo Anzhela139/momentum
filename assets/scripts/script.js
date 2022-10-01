@@ -84,7 +84,6 @@ function viewBgImage(data) {
 let i = 0;
 
 function getImage() {
-  console.log(indextime)
   let basedImages = [];
   if (indextime === 0) {
     basedImages = [setBg(baseArr[0], images), setBg(baseArr[1], images), setBg(baseArr[2], images), setBg(baseArr[3], images)];
@@ -102,24 +101,27 @@ function getImage() {
   const index = i % basedImages.length;
   const imageSrc = `${basedImages[index]}`;
   viewBgImage(imageSrc);
+  console.log('working')
   i++;  
   $btnImage.disabled = true;
   setTimeout(function() {$btnImage.disabled = false}, 1000);
-  //setTimeout(getImage(), 600000);
 } 
 
 getImage();
 function checkHour(func) {
   let today = new Date(),
   min = today.getMinutes();
-  if (min === 54) {
-    func();
-    console.log('work');
 
-    setTimeout(func, 600000);
+  if (min !== 00) {
+    //func();
+
+    let timeout = (60 - min) * 60000;
+    console.log(timeout);
+    setTimeout(func(), timeout);
   }
 }
 checkHour(getImage);
+
 function getElem(elem, dom) {
   if (localStorage.getItem(`${elem}`) === null) {
     dom.textContent = `[Enter ${elem}]`;
@@ -166,7 +168,7 @@ $btnQuote.addEventListener('click', getQuote);
 
 
 async function getWeather() {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${$city.textContent}&lang=ru&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${$city.textContent}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
   const res = await fetch(url);
   const data = await res.json();
   
@@ -198,3 +200,4 @@ $focus.addEventListener('blur', setFocus);
 showTime();
 getElem('name', $name);
 getElem('focus', $focus);
+getElem('city', $city);
