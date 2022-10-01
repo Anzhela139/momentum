@@ -26,7 +26,7 @@ function showTime() {
   let day = today.getDate(),
     dayOfWeek = days[ today.getDay() ],
     month = months[ today.getMonth() ];
-  $time.innerHTML = `${hour}:${addZeros(min)}:${addZeros(sec)}, ${day} ${dayOfWeek} ${month}`;
+  $time.innerHTML = `${hour}:${addZeros(min)}:${addZeros(sec)}, <span>${day} ${dayOfWeek} ${month}</span>`;
 
   setTimeout(showTime, 1000);
 }
@@ -101,7 +101,6 @@ function getImage() {
   const index = i % basedImages.length;
   const imageSrc = `${basedImages[index]}`;
   viewBgImage(imageSrc);
-  console.log('working')
   i++;  
   $btnImage.disabled = true;
   setTimeout(function() {$btnImage.disabled = false}, 1000);
@@ -113,13 +112,14 @@ function checkHour(func) {
   min = today.getMinutes();
 
   if (min !== 00) {
-    //func();
-
     let timeout = (60 - min) * 60000;
-    console.log(timeout);
-    setTimeout(func(), timeout);
+    setTimeout(()=>func(), timeout);
+  }
+  else {
+    func();
   }
 }
+
 checkHour(getImage);
 
 function getElem(elem, dom) {
@@ -135,26 +135,36 @@ function setName(e) {
   if (e.type === 'keypress') {
 
     if (e.which == 13 || e.keyCode == 13) {
-      localStorage.setItem('name', e.target.innerText);
+      if (e.target.innerText === '') {
+        e.target.innerText = localStorage.getItem('name');
+        $name.innerText = localStorage.getItem('name');
+      }
+      else {
+        localStorage.setItem('name', e.target.innerText);
+      }
+
       $name.blur();
     }
-  } else {
-    localStorage.setItem('name', e.target.innerText);
-  }
+  } 
 }
 
 function setFocus(e) {
   if (e.type === 'keypress') {
 
     if (e.which == 13 || e.keyCode == 13) {
-      localStorage.setItem('focus', e.target.innerText);
+      if (e.target.innerText === '') {
+        e.target.innerText = localStorage.getItem('focus');
+        $focus.innerText = localStorage.getItem('focus');
+      }
+      else {
+        localStorage.setItem('focus', e.target.innerText);
+      }
+      
       $focus.blur();
     }
-  } else {
-    localStorage.setItem('focus', e.target.innerText);
   }
 }
-/*
+
 async function getQuote() {  
   const url = `https://cors-anywhere.herokuapp.com/https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
   const res = await fetch(url);
@@ -166,30 +176,52 @@ document.addEventListener('DOMContentLoaded', getQuote);
 $btnQuote.addEventListener('click', getQuote);
 
 
-
 async function getWeather() {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${$city.textContent}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+  let url = '';
+  if (localStorage.getItem('city') !== '') {
+    let cityLS = localStorage.getItem('city');
+    url = `https://api.openweathermap.org/data/2.5/weather?q=${cityLS}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+  }
+  else {
+    url = `https://api.openweathermap.org/data/2.5/weather?q=${$city.textContent}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
+  }
   const res = await fetch(url);
   const data = await res.json();
-  
+
+ if (data.cod > 400) {
+  $weatherIcon.className = 'weather-icon owf';
+  $weatherIcon.classList.add(`owf-800`);
+  $temperature.textContent = `No `;
+  $weatherDescription.textContent = '[Enter right city name]';
+
+ }
   $weatherIcon.className = 'weather-icon owf';
   $weatherIcon.classList.add(`owf-${data.weather[0].id}`);
   $temperature.textContent = `${data.main.temp.toFixed(0)}°C`;
   $weatherDescription.textContent = data.weather[0].description;
 }
 
-function setCity(event) {
-  if (event.code === 'Enter') {
-    getWeather();
-    $city.blur();
+function setCity(e) {
+  if (e.type === 'keypress') {
+    if (e.which == 13 || e.keyCode == 13) {
+      if (e.target.innerText === '') {
+        e.target.innerText = localStorage.getItem('city');
+        $city.innerText = localStorage.getItem('city');
+      }
+      else {
+        localStorage.setItem('city', e.target.innerText);
+      }
+      getWeather();
+      $city.blur();
+    }
+  } else {
+    localStorage.setItem('city', e.target.innerText);
   }
 }
 
-
 document.addEventListener('DOMContentLoaded', getWeather);
-$city.addEventListener('keypress', setCity);
 
-*/
+
 
 $btnImage.addEventListener('click', getImage);
 
@@ -197,6 +229,10 @@ $name.addEventListener('keypress', setName);
 $name.addEventListener('blur', setName);
 $focus.addEventListener('keypress', setFocus);
 $focus.addEventListener('blur', setFocus);
+
+$city.addEventListener('keypress', setCity);
+$city.addEventListener('blur', setCity);
+
 showTime();
 getElem('name', $name);
 getElem('focus', $focus);

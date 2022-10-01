@@ -9,17 +9,25 @@
   <title>momentum</title>
 </head>
 <body>
-  <button class="btn" id="btn-change-image">Change bg</button>
-  <div class="time-greeting">
-    <time class="time"></time>
-    <h1>
-      <span class="greeting"></span>
-      <span class="name" contenteditable="true"></span>
-    </h1>
-    <h2>What Is Your Focus For Today?</h2>
-    <h2 class="focus" contenteditable="true"></h2>
-  </div>
+  <div class="wrapper">
+    <button class="btn" id="btn-change-image">Change bg</button>
+    <div class="time-greeting">
+      <time class="time"></time>
+      <h1>
+        <span class="greeting"></span>
+        <span class="name" contenteditable="true"></span>
+      </h1>
+      <h2>What Is Your Focus For Today?</h2>
+      <h2 class="focus" contenteditable="true"></h2>
+    </div>
 
+    <div class="weather">
+      <i class="weather-icon owf"></i>
+      <div class="city" contenteditable="true"></div>
+      <div class="temperature"></div>
+      <div class="weather-description"></div>
+    </div>
+  </div>
 
   <button class="btn" id="btn-quote">Refresh Qu</button>
   <figure class="quote">
@@ -27,10 +35,6 @@
     <figcaption></figcaption>
   </figure>
 
-  <i class="weather-icon owf"></i>
-  <div class="city" contenteditable="true">Минск</div>
-  <div class="temperature"></div>
-  <div class="weather-description"></div>
   <script src="script.js"></script>
 </body>
 </html>
