@@ -78,7 +78,7 @@ function viewBgImage(data) {
     const img = document.createElement('img');
     img.src = src;
     img.onload = () => {
-        body.style.backgroundImage = `url(${src}), url(../images/overlay.png)`;
+        body.style.backgroundImage = `url(${src}), url(./images/overlay.png)`;
     };
 }
 let i = 0;
@@ -166,7 +166,7 @@ function setFocus(e) {
 }
 
 async function getQuote() {
-    const url = `https://cors-anywhere.herokuapp.com/https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
+    const url = `https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
     const res = await fetch(url);
     const quote = await res.json();
     $blockquote.textContent = quote.quoteText;
@@ -177,14 +177,10 @@ $btnQuote.addEventListener('click', getQuote);
 
 
 async function getWeather() {
-    let url = '';
-    if (localStorage.getItem('city') !== '') {
-        let cityLS = localStorage.getItem('city');
-        url = `https://api.openweathermap.org/data/2.5/weather?q=${cityLS}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
-    }
-    else {
-        url = `https://api.openweathermap.org/data/2.5/weather?q=${$city.textContent}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
-    }
+    let cityLS = localStorage.getItem('city') !== '' ? localStorage.getItem('city') : $city.textContent;
+    if(!cityLS) return;
+ 
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityLS}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
     const res = await fetch(url);
     const data = await res.json();
 
