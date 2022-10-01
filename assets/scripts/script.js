@@ -36,7 +36,7 @@ const addZeros = (n) => { return (parseInt(n, 10) < 10 ? '0' : '') + n }
 const randomArr = (arr) => arr.slice(0).sort((a, b) => 0.5 - Math.random());
 
 let base = '';
-const baseArr = ['./assets/images/morning/', './assets/images/afternoon/', './assets/images/evening/', './assets/images/night/'];
+const baseArr = ['../images/morning/', '../images/afternoon/', '../images/evening/', '../images/night/'];
 let setBg = (index, arr) => randomArr(arr).splice(13).map(item => index + item);
 
 const images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
@@ -48,25 +48,24 @@ function setBgGreet() {
 
     if (hour >= 6 && hour < 12) {
         $greeting.textContent = 'Good Morning, ';
-        base = './assets/images/morning/';
+        base = '../images/morning/';
         indextime = 0;
     }
     else if (hour >= 12 && hour < 18) {
         $greeting.textContent = 'Good Afternoon, ';
-        base = './assets/images/afternoon/';
+        base = '../images/afternoon/';
         indextime = 1;
     }
     else if (hour >= 18 && hour <= 23) {
         $greeting.textContent = 'Good Evening, ';
-        base = './assets/images/evening/';
+        base = '../images/evening/';
         indextime = 2;
 
     }
     else {
         $greeting.textContent = 'Good Night, ';
-        base = './assets/images/night/';
+        base = '../images/night/';
         indextime = 3;
-        //document.body.style.color = 'azure';
     }
     return base;
 }
@@ -78,7 +77,7 @@ function viewBgImage(data) {
     const img = document.createElement('img');
     img.src = src;
     img.onload = () => {
-        body.style.backgroundImage = `url(${src}), url(./images/overlay.png)`;
+        body.style.backgroundImage = `url(${src}), url(../images/overlay.png)`;
     };
 }
 let i = 0;
@@ -167,7 +166,13 @@ function setFocus(e) {
 
 async function getQuote() {
     const url = `https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
-    const res = await fetch(url);
+    const res = await fetch(url, {
+        method: "GET", 
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
     const quote = await res.json();
     $blockquote.textContent = quote.quoteText;
     $figcaption.textContent = quote.quoteAuthor;
