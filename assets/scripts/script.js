@@ -77,7 +77,7 @@ function viewBgImage(data) {
     const img = document.createElement('img');
     img.src = src;
     img.onload = () => {
-        body.style.backgroundImage = `url(${src}), url(assets/images/overlay.png)`;
+        body.style.backgroundImage = `url(${src}), url(/images/overlay.png)`;
     };
 }
 let i = 0;
@@ -171,9 +171,11 @@ async function getQuote() {
         mode: 'no-cors',
     })
         .then((res) => {
-            const quote = res.json();
-            $blockquote.textContent = quote.quoteText;
-            $figcaption.textContent = quote.quoteAuthor;
+            if(res) {
+                const quote = res.json();
+                $blockquote.textContent = quote.quoteText;
+                $figcaption.textContent = quote.quoteAuthor;
+            }
         })
         .catch((err) => {
             console.log(err);
