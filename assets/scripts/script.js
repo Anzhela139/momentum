@@ -33,10 +33,10 @@ function showTime() {
 
 const addZeros = (n) => {return (parseInt(n, 10) < 10 ? '0' : '') + n}
 
+const randomArr = (arr) => arr.sort( (a,b)=> 0.5-Math.random()); 
 
 let base = '';
 const images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
-const imagesRandom = randomArr(images).splice(5);
 let i = 0;
 function setBgGreet() {
   let today = new Date(),
@@ -75,9 +75,10 @@ function viewBgImage(data) {
   }; 
 }
 function getImage() {
-  
-  const index = i % images.length;
-  const imageSrc = base + images[index];
+  const imagesRandom = randomArr(images).splice(13);
+  const index = i % imagesRandom.length;
+  const imageSrc = base + imagesRandom[index];
+  console.log(imageSrc)
   viewBgImage(imageSrc);
   i++;
 } 
