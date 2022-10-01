@@ -4,5 +4,5 @@
 
 [Demo momentum](https://anzhelaabitova.github.io/momentum/)
 
-Главная ![image info](https://anzhelaabitova.github.io/shelter/assets/images/screenshot.png)
+Главная ![image info](https://anzhelaabitova.github.io/momentum/assets/images/screenshot.png)
  
