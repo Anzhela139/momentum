@@ -1,17 +1,16 @@
-import { getElem } from "./utils.js";
+import SetterUserPreference from "./setterUserPreference.js";
 
-class City {
+class City extends SetterUserPreference {
     constructor(cityEl, weather) {
+        super(cityEl, 'city');
         this.cityEl = cityEl;
         this.weather = weather;
     }
 
     init() {
-        this.getUserLocation();
-        this.cityEl.addEventListener('keypress', this.setCity.bind(this));
-        this.cityEl.addEventListener('blur', this.setCity.bind(this));
+        super.init();
 
-        getElem('city', this.cityEl);
+        this.getUserLocation();
     }
 
     /**
@@ -20,11 +19,12 @@ class City {
     async getUserLocation() {
         function success({ coords }) {
             const { latitude, longitude } = coords;
-            console.log(coords)
+
             window.userLocation = {
                 latitude: latitude, 
                 longitude: longitude
             };
+            this.weather.getWeather(window.userLocation);
         }
             
         function error({ message }) {
@@ -37,22 +37,24 @@ class City {
         }
     }
 
-    setCity(e) {
+    setUserPreference(e) {
         if (e.type === 'keypress') {
             if (e.which == 13 || e.keyCode == 13) {
-                if (e.target.innerText === '') {
-                    e.target.innerText = localStorage.getItem('city');
-                    this.cityEl.innerText = localStorage.getItem('city');
-                }
-                else {
-                    localStorage.setItem('city', e.target.innerText);
-                }
-                this.weather.getWeather();
-                this.cityEl.blur();
+                this.weather.getWeather(e.target.innerText);
             }
-        } else {
-            localStorage.setItem('city', e.target.innerText);
         }
+        super.setUserPreference(e);
+    }
+
+    getCity() {
+        let cityLS = '';
+        if(typeof city !== 'object' || Object.keys(city).length === 0) {
+            cityLS = `q=${localStorage.getItem('city') !== '' ? localStorage.getItem('city') : this.cityEl.textContent}&lang=en`;
+        } else {
+            cityLS =  `lat=${window.userLocation.userLocation?.latitude}&lon=${window.userLocation.userLocation?.longitude}`;
+        }
+
+        return cityLS;
     }
 }
 

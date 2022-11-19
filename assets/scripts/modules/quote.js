@@ -4,6 +4,11 @@ class Quote {
         this.quoteCaption = quoteCaption;
     }
 
+    init() {
+        this.getQuote();
+        this.quoteCaption.addEventListener('click', this.getQuote.bind(this));
+    }
+
     async getQuote() {
         const url = `https://api.quotable.io/random?tags=technology,famous-quotes`;
         fetch(url, {
@@ -12,7 +17,7 @@ class Quote {
             .then(async (res) => {
                 if (res) {
                     const quote = await res.json();
-                    console.log(quote)
+
                     this.quoteEl.textContent = quote?.content;
                     this.quoteCaption.textContent = quote?.author;
                 }
