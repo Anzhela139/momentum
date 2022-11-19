@@ -17,7 +17,7 @@ class Time {
         let day = today.getDate(),
             dayOfWeek = days[today.getDay()],
             month = months[today.getMonth()];
-        this.timeEl.innerHTML = `${hour}:${addZeros(min)}:${addZeros(sec)}, <span>${day} ${dayOfWeek} ${month}</span>`;
+        this.timeEl.innerHTML = `<span>${hour}:${addZeros(min)}:${addZeros(sec)},</span><span>${day} ${dayOfWeek} ${month}</span>`;
 
         setTimeout(this.showTime.bind(this), 1000);
     }

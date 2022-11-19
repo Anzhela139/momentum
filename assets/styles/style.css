@@ -76,12 +76,21 @@ body {
 
 .time {
     margin-top: 45px;
-    font-size: clamp(1.5rem, 9 * (1vw + 1vh) / 2, 5rem);
+    display: flex;
+    flex-direction: column;
 }
 
 .time span {
-    display: flex;
+    display: block;
     font-size: clamp(1.5rem, 6 * (1vw + 1vh) / 2, 4rem);
+}
+
+.time > span:first-child {
+    width: 290px;
+    left: 12rem;
+    display: block;
+    font-size: clamp(1.5rem, 9 * (1vw + 1vh) / 2, 5rem);
+    position: relative;
 }
 
 h1 {
@@ -124,6 +133,7 @@ blockquote,
     min-height: 2rem;
 }
 
+.focus,
 .name {
     display: block;
     min-width: 250px;

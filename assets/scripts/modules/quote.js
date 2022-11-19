@@ -1,12 +1,13 @@
 class Quote {
-    constructor( quoteEl, quoteCaption ) {
+    constructor( quoteEl, quoteCaption, btnQuote ) {
         this.quoteEl = quoteEl;
         this.quoteCaption = quoteCaption;
+        this.btnQuote = btnQuote;
     }
 
     init() {
         this.getQuote();
-        this.quoteCaption.addEventListener('click', this.getQuote.bind(this));
+        this.btnQuote.addEventListener('click', this.getQuote.bind(this));
     }
 
     async getQuote() {
