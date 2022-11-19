@@ -1,245 +1,39 @@
-const $time = document.querySelector('.time'),
-    $greeting = document.querySelector('.greeting'),
-    $name = document.querySelector('.name'),
-    $focus = document.querySelector('.focus');
+import Background from "./modules/background.js";
+import Quote from "./modules/quote.js";
+import Focus from "./modules/focus.js";
+import Weather from "./modules/weather.js";
+import City from "./modules/city.js";
+import Time from "./modules/time.js";
+import Name from "./modules/name.js";
 
-const $blockquote = document.querySelector('blockquote'),
-    $figcaption = document.querySelector('figcaption'),
-    $btnQuote = document.querySelector('#btn-quote');
+class Momentum {
+    constructor() {
+        this.today = new Date();
+        this.background = new Background(document.querySelector('.greeting'), document.querySelector('#btn-change-image'));
+        this.quote = new Quote(document.querySelector('blockquote'), document.querySelector('figcaption'), document.querySelector('#btn-quote'));
+        this.focus = new Focus(document.querySelector('.focus'));
+        this.weather = new Weather();
+        this.city = new City(document.querySelector('.city'), this.weather);
+        this.time = new Time(document.querySelector('.time'));
+        this.name = new Name(document.querySelector('.name'));
 
-const $weatherIcon = document.querySelector('.weather-icon');
-const $temperature = document.querySelector('.temperature');
-const $weatherDescription = document.querySelector('.weather-description');
-const $city = document.querySelector('.city');
-
-const $btnImage = document.querySelector('#btn-change-image');
-
-function showTime() {
-    let today = new Date(),
-        hour = today.getHours(),
-        min = today.getMinutes(),
-        sec = today.getSeconds();
-
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    let day = today.getDate(),
-        dayOfWeek = days[today.getDay()],
-        month = months[today.getMonth()];
-    $time.innerHTML = `${hour}:${addZeros(min)}:${addZeros(sec)}, <span>${day} ${dayOfWeek} ${month}</span>`;
-
-    setTimeout(showTime, 1000);
-}
-
-const addZeros = (n) => { return (parseInt(n, 10) < 10 ? '0' : '') + n }
-
-const randomArr = (arr) => arr.slice(0).sort((a, b) => 0.5 - Math.random());
-
-let base = '';
-const baseArr = ['assets/images/morning/', 'assets/images/afternoon/', 'assets/images/evening/', 'assets/images/night/'];
-let setBg = (index, arr) => randomArr(arr).splice(13).map(item => index + item);
-
-const images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
-let imagesRandom = [];
-let indextime = 0;
-function setBgGreet() {
-    let today = new Date(),
-        hour = today.getHours();
-
-    if (hour >= 6 && hour < 12) {
-        $greeting.textContent = 'Good Morning, ';
-        base = 'assets/images/morning/';
-        indextime = 0;
+        this.init();
     }
-    else if (hour >= 12 && hour < 18) {
-        $greeting.textContent = 'Good Afternoon, ';
-        base = 'assets/images/afternoon/';
-        indextime = 1;
-    }
-    else if (hour >= 18 && hour <= 23) {
-        $greeting.textContent = 'Good Evening, ';
-        base = 'assets/images/evening/';
-        indextime = 2;
 
-    }
-    else {
-        $greeting.textContent = 'Good Night, ';
-        base = 'assets/images/night/';
-        indextime = 3;
-    }
-    return base;
-}
-setBgGreet(base);
+    init() {
+        this.time.showTime();
 
-function viewBgImage(data) {
-    const body = document.querySelector('body');
-    const src = data;
-    const img = document.createElement('img');
-    img.src = src;
-    img.onload = () => {
-        body.style.backgroundImage = `url(${src}), url(/images/overlay.png)`;
-    };
-}
-let i = 0;
+        const $btnQuote = document.querySelector('#btn-quote');
 
-function getImage() {
-    let basedImages = [];
-    if (indextime === 0) {
-        basedImages = [setBg(baseArr[0], images), setBg(baseArr[1], images), setBg(baseArr[2], images), setBg(baseArr[3], images)];
-    }
-    else if (indextime === 1) {
-        basedImages = [setBg(baseArr[1], images), setBg(baseArr[2], images), setBg(baseArr[3], images), setBg(baseArr[0], images)];
-    }
-    else if (indextime === 2) {
-        basedImages = [setBg(baseArr[2], images), setBg(baseArr[3], images), setBg(baseArr[0], images), setBg(baseArr[1], images)];
-    }
-    else if (indextime === 3) {
-        basedImages = [setBg(baseArr[3], images), setBg(baseArr[0], images), setBg(baseArr[1], images), setBg(baseArr[2], images)];
-    }
-    basedImages = basedImages.flat();
-    const index = i % basedImages.length;
-    const imageSrc = `${basedImages[index]}`;
-    viewBgImage(imageSrc);
-    i++;
-    $btnImage.disabled = true;
-    setTimeout(function () { $btnImage.disabled = false }, 1000);
-}
 
-getImage();
-function checkHour(func) {
-    let today = new Date(),
-        min = today.getMinutes();
+        this.quote.getQuote();
+        this.background.checkHour(this.background.getImage());
+        $btnQuote.addEventListener('click', this.quote.getQuote.bind(this.quote));
 
-    if (min !== 00) {
-        let timeout = (60 - min) * 60000;
-        setTimeout(() => func(), timeout);
-    }
-    else {
-        func();
+        this.name.init();
+        this.focus.init();
+        this.city.init();
     }
 }
 
-checkHour(getImage);
-
-function getElem(elem, dom) {
-    if (localStorage.getItem(`${elem}`) === null) {
-        dom.textContent = `[Enter ${elem}]`;
-    } else {
-        dom.textContent = localStorage.getItem(`${elem}`);
-    }
-}
-
-
-function setName(e) {
-    if (e.type === 'keypress') {
-
-        if (e.which == 13 || e.keyCode == 13) {
-            if (e.target.innerText === '') {
-                e.target.innerText = localStorage.getItem('name');
-                $name.innerText = localStorage.getItem('name');
-            }
-            else {
-                localStorage.setItem('name', e.target.innerText);
-            }
-
-            $name.blur();
-        }
-    }
-}
-
-function setFocus(e) {
-    if (e.type === 'keypress') {
-
-        if (e.which == 13 || e.keyCode == 13) {
-            if (e.target.innerText === '') {
-                e.target.innerText = localStorage.getItem('focus');
-                $focus.innerText = localStorage.getItem('focus');
-            }
-            else {
-                localStorage.setItem('focus', e.target.innerText);
-            }
-
-            $focus.blur();
-        }
-    }
-}
-
-async function getQuote() {
-    const url = `https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en`;
-    fetch(url, {
-        method: "GET", 
-        mode: 'no-cors',
-    })
-        .then((res) => {
-            if(res) {
-                const quote = res.json();
-                $blockquote.textContent = quote.quoteText;
-                $figcaption.textContent = quote.quoteAuthor;
-            }
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-
-}
-document.addEventListener('DOMContentLoaded', getQuote);
-$btnQuote.addEventListener('click', getQuote);
-
-
-async function getWeather() {
-    let cityLS = localStorage.getItem('city') !== '' ? localStorage.getItem('city') : $city.textContent;
-    if(!cityLS) return;
- 
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityLS}&lang=en&appid=08f2a575dda978b9c539199e54df03b0&units=metric`;
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (data.cod > 400) {
-        $weatherIcon.className = 'weather-icon owf';
-        $weatherIcon.classList.add(`owf-800`);
-        $temperature.textContent = `No `;
-        $weatherDescription.textContent = '[Enter right city name]';
-
-    }
-    $weatherIcon.className = 'weather-icon owf';
-    $weatherIcon.classList.add(`owf-${data.weather[0].id}`);
-    $temperature.textContent = `${data.main.temp.toFixed(0)}°C`;
-    $weatherDescription.textContent = data.weather[0].description;
-}
-
-function setCity(e) {
-    if (e.type === 'keypress') {
-        if (e.which == 13 || e.keyCode == 13) {
-            if (e.target.innerText === '') {
-                e.target.innerText = localStorage.getItem('city');
-                $city.innerText = localStorage.getItem('city');
-            }
-            else {
-                localStorage.setItem('city', e.target.innerText);
-            }
-            getWeather();
-            $city.blur();
-        }
-    } else {
-        localStorage.setItem('city', e.target.innerText);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', getWeather);
-
-
-
-$btnImage.addEventListener('click', getImage);
-
-$name.addEventListener('keypress', setName);
-$name.addEventListener('blur', setName);
-$focus.addEventListener('keypress', setFocus);
-$focus.addEventListener('blur', setFocus);
-
-$city.addEventListener('keypress', setCity);
-$city.addEventListener('blur', setCity);
-
-showTime();
-getElem('name', $name);
-getElem('focus', $focus);
-getElem('city', $city);
+document.addEventListener('DOMContentLoaded', new Momentum());
