@@ -1,10 +1,14 @@
 import { addZeros } from "./utils.js";
 
+/** инициализирует проставление времени */
 class Time {
     constructor(timeEl) {
         this.timeEl = timeEl;
     }
 
+    /**
+     * @description - проставляет время
+     */    
     showTime() {
         let today = new Date(),
             hour = today.getHours(),

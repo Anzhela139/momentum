@@ -5,6 +5,7 @@ import Weather from "./modules/weather.js";
 import City from "./modules/city.js";
 import Time from "./modules/time.js";
 
+/** инициализирует приложение */
 class Momentum {
     constructor() {
         window.userLocation = {};
@@ -20,6 +21,9 @@ class Momentum {
         this.init();
     }
 
+    /**
+     * @description - инициализирует приложение
+     */
     init() {
         this.time.showTime();
         this.quote.init();

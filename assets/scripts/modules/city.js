@@ -1,12 +1,21 @@
 import SetterUserPreference from "./setterUserPreference.js";
 
+/** инициализирует проставление города */
 class City extends SetterUserPreference {
+    /**
+     * @param {HTMLDivElement} cityEl - элемент отображения города в DOM
+     * @param {ClassInstance} weather - инстанс класса weather
+     */
     constructor(cityEl, weather) {
         super(cityEl, 'city');
+
         this.cityEl = cityEl;
         this.weather = weather;
     }
 
+    /**
+     * @description - инициализирует проставление города
+     */
     init() {
         super.init();
 
@@ -37,6 +46,9 @@ class City extends SetterUserPreference {
         }
     }
 
+    /**
+     * @description - расширяет родительский метод и добавляет к нему проверку погоды
+     */
     setUserPreference(e) {
         if (e.type === 'keypress') {
             if (e.which == 13 || e.keyCode == 13) {
@@ -46,6 +58,10 @@ class City extends SetterUserPreference {
         super.setUserPreference(e);
     }
 
+    /**
+     * @description - возвращает строку либо координатами пользователя, либо название города, введенное пользователем
+     * @return {String} - строка либо координатами пользователя, либо название города, введенное пользователем
+     */
     getCity() {
         let cityLS = '';
         if(typeof city !== 'object' || Object.keys(city).length === 0) {

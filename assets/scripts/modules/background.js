@@ -1,6 +1,26 @@
 import { randomArr } from "./utils.js";
 
+/** инициализирует подходящую фоновую картинку */
 class Background {
+/**
+   * @typedef {Object} StatisticsDataDefault
+   * @property {String} prop - название параметра статистики, по
+   * которому он отображается в базе данных
+   * @property {String} name - название, которые выводится в интерфейсе статистики
+   * (карточках) и  по которому производится поиск
+   * @property {String} section - раздел (таб), в который помещен параметра статистики
+   * @property {Number|String} value - значение параметра статистики
+   * @property {Number} [icon] -    * Значение {icon}:
+   *     -1 показатели уменьшились, стрелка показывает вниз;
+   *     0 показатели неизменны, стрелка не отображается;
+   *     1 показатели увеличились, стрелка показывает вверх;
+   */
+  /**
+   * @description - статические данные для создания интерфейса аналитики
+   * @param {Array<StatisticsDataDefault>} elem - массив объектов, в которых после
+   * запроса данных из базы данных изменяется {value} и вычисляется
+   * значение {icon}.
+   */
     baseArr = [
         {
             period: 'morning',
@@ -23,6 +43,7 @@ class Background {
             indexTime: 3,
             order: [3, 0, 1, 2]
         }];
+
     images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
 
     constructor(greetingEl, btnImage) {
