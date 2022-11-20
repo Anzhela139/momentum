@@ -13,11 +13,11 @@ body {
     width: 100vw;
     background-size: cover;
     background-position: center center;
-    background-image: url("../assets/images/night/01.jpg");
+    background-image: url("./../images/night/01.jpg");
     background-repeat: no-repeat;
     transition: background-image 1s ease-in-out;
     position: relative;
-    text-shadow: 1px 1px 2px rgb(2 56 52 / 40%);
+    text-shadow: 1px 1px 2px rgb(2 56 52 / 40%),  0px 0px 12px rgba(2, 56, 52, .8);;
 }
 
 .wrapper {
@@ -76,17 +76,26 @@ body {
 
 .time {
     margin-top: 45px;
-    font-size: clamp(1.5rem, 9 * (1vw + 1vh) / 2, 5rem);
+    display: flex;
+    flex-direction: column;
 }
 
 .time span {
-    display: flex;
+    display: block;
     font-size: clamp(1.5rem, 6 * (1vw + 1vh) / 2, 4rem);
+}
+
+.time > span:first-child {
+    width: 290px;
+    left: 12rem;
+    display: block;
+    font-size: clamp(1.5rem, 9 * (1vw + 1vh) / 2, 5rem);
+    position: relative;
 }
 
 h1 {
     font-size: clamp(1.3rem, 8 * (1vw + 1vh) / 2, 4rem);
-
+    display: flex;
 }
 
 h2 {
@@ -109,6 +118,11 @@ figcaption {
     margin: 0 auto;
 }
 
+blockquote {
+    font-size: 2rem;
+    margin-bottom: 0.7rem;
+}
+
 blockquote,
 .weather-description {
     width: 90%;
@@ -117,6 +131,12 @@ blockquote,
 
 .quote {
     min-height: 2rem;
+}
+
+.focus,
+.name {
+    display: block;
+    min-width: 250px;
 }
 
 .weather-icon {
