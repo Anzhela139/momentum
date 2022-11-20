@@ -26,6 +26,13 @@ function sanitazeInput(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;').trim();
 }
 
+/**
+ * @description - метод обращения к апи, с запасным вариантом локальных данных, 
+ * если основные апи не отвечают, либо отвечают с ошибками
+ * @param {String} url - урл, по которому обращаемся к апи
+ * @param {String} [spareUrl=''] - запасной урл, по которому обращаемся к апи
+ * @return {Array<Object>} - данные, полученные от апи
+ */
 async function wrapFetchCall( url, spareUrl = '' ) {
     try {
         let controller = new AbortController()

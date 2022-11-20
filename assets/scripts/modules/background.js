@@ -2,25 +2,16 @@ import { randomArr } from "./utils.js";
 
 /** инициализирует подходящую фоновую картинку */
 class Background {
-/**
-   * @typedef {Object} StatisticsDataDefault
-   * @property {String} prop - название параметра статистики, по
-   * которому он отображается в базе данных
-   * @property {String} name - название, которые выводится в интерфейсе статистики
-   * (карточках) и  по которому производится поиск
-   * @property {String} section - раздел (таб), в который помещен параметра статистики
-   * @property {Number|String} value - значение параметра статистики
-   * @property {Number} [icon] -    * Значение {icon}:
-   *     -1 показатели уменьшились, стрелка показывает вниз;
-   *     0 показатели неизменны, стрелка не отображается;
-   *     1 показатели увеличились, стрелка показывает вверх;
-   */
-  /**
-   * @description - статические данные для создания интерфейса аналитики
-   * @param {Array<StatisticsDataDefault>} elem - массив объектов, в которых после
-   * запроса данных из базы данных изменяется {value} и вычисляется
-   * значение {icon}.
-   */
+    /**
+       * @typedef {Object} BaseArr
+       * @property {String} period - название времени суток
+       * @property {String} greeting - приветствие пользователя согласно времени суток
+       * @property {Number} indexTime - период времени суток
+       * @property {Array<Number>} order - порядок подбора массива картинок согласно времени суток
+       */
+    /**
+     * @description - статические данные для выбора и отображения подходящей фоновой картинки
+     */
     baseArr = [
         {
             period: 'morning',
@@ -44,8 +35,15 @@ class Background {
             order: [3, 0, 1, 2]
         }];
 
+    /**
+     * @description - массив с названиями фоновых картинок
+     */
     images = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
-
+    
+    /**
+     * @param {HTMLDivElement} greetingEl - элемент DOM для проставления приветствия
+     * @param {HTMLButtonElement} btnImage - элемент DOM кнопка для смены фоновой картинки
+     */
     constructor(greetingEl, btnImage) {
         this.greetingEl = greetingEl;
         this.btnImage = btnImage;
@@ -56,13 +54,20 @@ class Background {
 
         this.init();
     }
-
+    
+    /**
+     * @description - инициализирует подходящую фоновую картинку
+     */
     init() {
         this.setBgGreet();
         this.setBgImage();
         this.btnImage.addEventListener('click', this.setBgImage.bind(this));
     }
-
+    /**
+     * @description - возвращает массив urls рандомных фоновых картинок,  рассортированный по времени суток
+     * @param {Array<Number>} nums - пордок сортировки
+     * @return {Array<String>} - массив urls рандомных фоновых картинок,  рассортированный по времени суток
+     */
     getBGRandomArray = (nums) => {
         const getPeriodImgArray = (index, arr) => randomArr(arr).splice(13).map(item => `${index}/${item}`);
 
@@ -74,6 +79,9 @@ class Background {
         );
     }
 
+    /**
+     * @description - определяет время суток и проставляет приветствие пользователю 
+     */
     setBgGreet() {
         let hour = this.today.getHours();
 
@@ -91,11 +99,19 @@ class Background {
         this.indexTime = this.base.indexTime;
     }
 
+    /**
+     * @description - проставляет подходящую фоновую картинку
+     * @param {String} src - url подходящей фоновой картинки
+     */
     viewBgImage(src) {
         const body = document.querySelector('body');
         body.style.backgroundImage = `url(assets/images/${src}), url(assets/images/overlay.png)`;
     }
 
+    /**
+     * @description - проставляет часы и минуты
+     * @param {Function} func - этот же метод
+     */
     checkHour(func) {
         let min = this.today.getMinutes();
 
@@ -107,6 +123,9 @@ class Background {
         }
     }
 
+    /**
+     * @description - определяет подходящую фоновую картинку
+     */
     setBgImage() {
         let basedImages = this.getBGRandomArray(this.base.order);
         const index = this.imageIndex % basedImages.length;
