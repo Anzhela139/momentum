@@ -2,7 +2,7 @@
 
 ## Показывает время погоду со сменой бекграунда по часам
 
-[Demo momentum](https://anzhelaabitova.github.io/momentum/)
+[Demo momentum](https://anzhela139.github.io/momentum/)
 
-Главная ![image info](https://anzhelaabitova.github.io/momentum/assets/images/screenshot.png)
+Главная ![image info](https://anzhela139.github.io/momentum/assets/images/screenshot.png)
  
